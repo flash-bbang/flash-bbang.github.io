@@ -81,8 +81,19 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
   </header>
 
   <div id="games">
-  <a class="card" href="https://flash-bbang.github.io/ding-zoo/" id="game-zoo" data-game="zoo">
+  <a class="card" href="https://flash-bbang.github.io/bbang-sudoku/" id="game-sudoku" data-game="sudoku">
     <span class="badge">NEW</span>
+    <div class="thumb"><img src="thumb_sudoku.jpg" alt="빵 스도쿠 킬러 모드 플레이 화면: 점선 묶음과 합이 그려진 판" width="600" height="750"></div>
+    <div class="info">
+      <h2 class="name">빵 스도쿠<small>BBANG SUDOKU</small></h2>
+      <p class="desc">클래식·대각선·홀짝·부등호·킬러 변형 스도쿠 5종. 틀리면 식빵이 타요.</p>
+      <div class="chips"><span>두뇌</span><span>집중</span><span>5종</span></div>
+      <div class="rec" data-game="sudoku"></div>
+      <span class="play">플레이 ▶</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://flash-bbang.github.io/ding-zoo/" id="game-zoo" data-game="zoo">
     <div class="thumb"><img src="thumb_zoo.jpg" alt="딩! 동물원 플레이 화면: 각성한 치타보다 먼저 종을 친 손" width="600" height="750"></div>
     <div class="info">
       <h2 class="name">딩! 동물원<small>DING ZOO</small></h2>
@@ -136,6 +147,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 
   const fmt = n => Number(n).toLocaleString();
   const mine = {
+    sudoku: () => { const v = Number(JSON.parse(read('bs-best') || '0')); return v ? `${fmt(v)}점` : null; },
     zoo: () => { const v = Number(JSON.parse(read('dz-best') || '0')); return v ? `${fmt(v)}점` : null; },
     block: () => { const v = Number(JSON.parse(read('bb-best') || '0')); return v ? `${fmt(v)}점` : null; },
     space: () => { const t = Number(read('skystack-bestTotal') || 0), f = Number(read('skystack-best1') || 0); return t ? `총점 ${fmt(t)}점` : f ? `${f}층` : null; }
@@ -145,7 +157,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     const d = document.createElement('div'); if (cls) d.className = cls;
     d.append(label + ' '); const b = document.createElement('b'); b.textContent = value; d.appendChild(b); el.appendChild(d);
   }
-  for (const g of ['zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
+  for (const g of ['sudoku', 'zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
 
   // current #1 on each game's online leaderboard
   const KEY = 'AIzaSyAOEpHjYw322A0Vfrjmp2KNw9WAYUGURtg';
@@ -160,7 +172,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
       return f ? {name: String(f.name.stringValue || '?').slice(0, 12), score: Number(f.score.integerValue || 0)} : null;
     } catch(e){ return undefined; } finally { clearTimeout(t); }
   }
-  [['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
+  [['sudoku', 'sudoku_scores'], ['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
     const r = await top1(col);
     if (r === undefined) return;            // offline: say nothing rather than claim it's empty
     line(recEl(g), 'top', '지금 1등', r ? `${r.name} · ${fmt(r.score)}점` : '비어 있음, 첫 1등 도전!');
