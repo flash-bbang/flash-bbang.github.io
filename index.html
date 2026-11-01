@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>flash.bbang</title>
+<meta name="description" content="번쩍 만들고 빵 터지는 웹 게임. 설치 없이 링크 누르면 바로 플레이">
+<meta property="og:title" content="flash.bbang">
+<meta property="og:description" content="번쩍 만들고 빵 터지는 웹 게임 🍞⚡ 설치 없이 바로 플레이">
+<meta property="og:image" content="https://flash-bbang.github.io/thumb_block.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#6ed6ba">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%236ed6ba'/%3E%3Crect x='3' y='4' width='10' height='9' fill='%231c1614'/%3E%3Crect x='4' y='5' width='8' height='7' fill='%23be6034'/%3E%3Crect x='5' y='6' width='6' height='5' fill='%23fce6c4'/%3E%3Crect x='6' y='7' width='1' height='2' fill='%231c1614'/%3E%3Crect x='9' y='7' width='1' height='2' fill='%231c1614'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Press+Start+2P&display=swap">
+<style>
+/* Layout: one centred link-in-bio column; pixel mascot header, then one card per game, newest first. */
+:root{
+  --mint:#6ed6ba;
+  --mint-hi:#d8f7ec;
+  --ink:#1c1614;
+  --cream:#fffaf0;
+  --toast:#be6034;
+  --butter:#ffd64a;
+  --muted:#3b5550;
+  --kr:"Do Hyeon",system-ui,-apple-system,sans-serif;
+  --px:"Press Start 2P","Courier New",monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{min-height:100vh;background:radial-gradient(circle at 50% 0%,var(--mint-hi) 0%,var(--mint) 55%) fixed,var(--mint);color:var(--ink);font-family:var(--kr);word-break:keep-all;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(rgba(28,22,20,.09) 1.2px,transparent 1.3px);background-size:22px 22px}
+main{position:relative;max-width:460px;margin:0 auto;padding-top:calc(28px + env(safe-area-inset-top,0px));padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+
+header{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+#mascot{width:104px;height:104px;image-rendering:pixelated;filter:drop-shadow(0 4px 0 rgba(28,22,20,.25))}
+h1{font-family:var(--px);font-weight:400;font-size:24px;margin:0;letter-spacing:-.5px}
+h1 span{color:var(--toast)}
+.tag{margin:0;font-size:21px;line-height:1.35;text-wrap:balance}
+.hello{font-size:18px;color:var(--muted);min-height:22px;margin:0}
+
+.card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;background:var(--cream);border:4px solid var(--ink);border-radius:20px;box-shadow:0 6px 0 var(--ink);padding:12px;color:inherit;text-decoration:none;position:relative;transition:transform .12s,box-shadow .12s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--ink)}
+.card:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+.card:focus-visible{outline:4px solid var(--butter);outline-offset:3px}
+.thumb{width:120px;aspect-ratio:4/5;max-width:100%;border-radius:12px;border:3px solid var(--ink);overflow:hidden;background:#cfe9e0}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.badge{position:absolute;top:-12px;right:14px;font-family:var(--px);font-size:10px;background:var(--butter);border:3px solid var(--ink);border-radius:999px;padding:6px 9px}
+.name{font-size:26px;line-height:1.05;margin:0}
+.name small{display:block;font-family:var(--px);font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:.04em}
+.desc{margin:0;font-size:17px;line-height:1.35;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips span{font-size:14px;background:#e5f6ef;border:2px solid #bfe3d6;border-radius:999px;padding:2px 9px}
+.rec{display:flex;flex-direction:column;gap:2px;font-size:15px;color:var(--muted)}
+.rec b{font-weight:400;color:var(--ink)}
+.rec .top b{color:var(--toast)}
+.play{margin-top:auto;align-self:flex-start;font-size:19px;background:var(--butter);border:3px solid var(--ink);border-radius:12px;padding:6px 16px;box-shadow:0 3px 0 var(--ink)}
+
+.soon{border:4px dashed rgba(28,22,20,.45);border-radius:20px;padding:18px;text-align:center;font-size:19px;color:var(--muted);background:rgba(255,250,240,.45)}
+.soon b{display:block;font-family:var(--px);font-size:11px;font-weight:400;margin-bottom:8px;color:var(--ink)}
+footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
+@media (max-width:360px){.card{grid-template-columns:96px minmax(0,1fr)}.thumb{width:96px}.name{font-size:23px}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <canvas id="mascot" width="104" height="104" aria-hidden="true"></canvas>
+    <h1>flash<span>.</span>bbang</h1>
+    <p class="tag">번쩍 만들고 빵 터지는 웹 게임 🍞⚡<br>설치 없이 누르면 바로 플레이</p>
+    <p class="hello" id="hello"></p>
+  </header>
+
+  <a class="card" href="https://flash-bbang.github.io/bbang-block/" id="game-block">
+    <span class="badge">NEW</span>
+    <div class="thumb"><img src="thumb_block.jpg" alt="빵빵 블록 플레이 화면: 꽉 찬 판 위에서 겁먹은 식빵들" width="600" height="750"></div>
+    <div class="info">
+      <h2 class="name">빵빵 블록<small>BBANG BLOCK</small></h2>
+      <p class="desc">식빵 블록을 채워 줄을 터뜨리는 퍼즐. 판이 차면 식빵들이 겁먹고, 비둘기는 똥을 싸고 가요.</p>
+      <div class="chips"><span>퍼즐</span><span>집중</span><span>이어하기</span></div>
+      <div class="rec" data-game="block"></div>
+      <span class="play">플레이 ▶</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://flash-bbang.github.io/space-xxx/" id="game-space">
+    <div class="thumb"><img src="thumb_space.jpg" alt="SPACE XXX 플레이 화면: 옆집 아저씨가 던진 고양이에 맞는 철골 탑" width="600" height="750"></div>
+    <div class="info">
+      <h2 class="name">SPACE XXX<small>TOWER TO SPACE</small></h2>
+      <p class="desc">비둘기 똥 피해서 120층 쌓고, 랜덤 점수만큼 우주로 날아가는 탑 쌓기.</p>
+      <div class="chips"><span>원터치</span><span>병맛</span><span>운빨</span></div>
+      <div class="rec" data-game="space"></div>
+      <span class="play">플레이 ▶</span>
+    </div>
+  </a>
+
+  <div class="soon"><b>COMING SOON</b>다음 게임 굽는 중… 🔥<br>만들어 줬으면 하는 게임은 댓글로!</div>
+
+  <footer>© flash.bbang · 유튜브 · 인스타그램 @flash.bbang</footer>
+</main>
+
+<script>
+(() => {
+  // pixel toast mascot, same art as the channel icon
+  const G = ["...KKKK.KKKK...","..KCCCCKCCCCK..",".KCCBBBBBBBCCK.",".KCBBBBBBBBBCK.",".KCBBEBBBEBBCK.",".KCBPEBBBEPBCK.",".KCBBBEEEBBBCK.",".KCCBBBBBBBCCK.","..KCCCCCCCCCK..","...KKKKKKKKK..."];
+  const C = {K:'#1c1614', C:'#be6034', B:'#fce6c4', E:'#1c1614', P:'#f48a70'};
+  const c = document.getElementById('mascot').getContext('2d'), u = 104 / 15, oy = (104 - G.length * u) / 2;
+  G.forEach((row, y) => [...row].forEach((ch, x) => { if (C[ch]){ c.fillStyle = C[ch]; c.fillRect(Math.round(x*u), Math.round(oy + y*u), Math.ceil(u), Math.ceil(u)); } }));
+
+  // same site as the games, so their saved nickname and best scores are readable here
+  const read = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
+  const nick = read('spacexxx-nick');
+  document.getElementById('hello').textContent = nick ? `${nick}님, 오늘은 뭐 할까요?` : '';
+
+  const fmt = n => Number(n).toLocaleString();
+  const mine = {
+    block: () => { const v = Number(JSON.parse(read('bb-best') || '0')); return v ? `${fmt(v)}점` : null; },
+    space: () => { const t = Number(read('skystack-bestTotal') || 0), f = Number(read('skystack-best1') || 0); return t ? `총점 ${fmt(t)}점` : f ? `${f}층` : null; }
+  };
+  const recEl = g => document.querySelector(`.rec[data-game="${g}"]`);
+  function line(el, cls, label, value){
+    const d = document.createElement('div'); if (cls) d.className = cls;
+    d.append(label + ' '); const b = document.createElement('b'); b.textContent = value; d.appendChild(b); el.appendChild(d);
+  }
+  for (const g of ['block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
+
+  // current #1 on each game's online leaderboard
+  const KEY = 'AIzaSyAOEpHjYw322A0Vfrjmp2KNw9WAYUGURtg';
+  const URL_ = `https://firestore.googleapis.com/v1/projects/space-xxx/databases/(default)/documents:runQuery?key=${KEY}`;
+  async function top1(collection){
+    const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const res = await fetch(URL_, {method:'POST', headers:{'Content-Type':'application/json'}, signal: ctrl.signal,
+        body: JSON.stringify({structuredQuery:{from:[{collectionId:collection}], orderBy:[{field:{fieldPath:'score'}, direction:'DESCENDING'}], limit:1}})});
+      if (!res.ok) return undefined;
+      const rows = await res.json(), f = rows[0] && rows[0].document && rows[0].document.fields;
+      return f ? {name: String(f.name.stringValue || '?').slice(0, 12), score: Number(f.score.integerValue || 0)} : null;
+    } catch(e){ return undefined; } finally { clearTimeout(t); }
+  }
+  [['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
+    const r = await top1(col);
+    if (r === undefined) return;            // offline: say nothing rather than claim it's empty
+    line(recEl(g), 'top', '지금 1등', r ? `${r.name} · ${fmt(r.score)}점` : '비어 있음, 첫 1등 도전!');
+  });
+})();
+</script>
+</body>
+</html>
