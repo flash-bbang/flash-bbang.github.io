@@ -184,7 +184,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     const order = cards.map((c, i) => ({c, n: counts[i], i})).sort((a, b) => b.n - a.n || a.i - b.i);
     order.forEach(({c, n}, rank) => {
       box.appendChild(c);
-      const p = document.createElement('div'); p.className = 'plays'; p.textContent = `🔥 ${fmt(n)}판 플레이`; c.querySelector('.rec').before(p);
+      if (n > 0){ const p = document.createElement('div'); p.className = 'plays'; p.textContent = `🔥 ${fmt(n)}판 플레이`; c.querySelector('.rec').before(p); }
       if (rank === 0 && n > 0 && n > order[1].n){ let b = c.querySelector('.badge'); if (!b){ b = document.createElement('span'); c.prepend(b); } b.className = 'badge hot'; b.textContent = '인기 1위'; }
     });
   })();
