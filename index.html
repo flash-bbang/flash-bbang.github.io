@@ -205,11 +205,15 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     const box = document.getElementById('games'), cards = [...box.querySelectorAll('.card')];
     const counts = await Promise.all(cards.map(c => plays(c.dataset.game)));
     if (counts.some(n => n === undefined)) return;                 // offline: keep the newest-first order
-    const order = cards.map((c, i) => ({c, n: counts[i], i})).sort((a, b) => b.n - a.n || a.i - b.i);
+    // the newest game (first card in the HTML) stays on top; everything after it goes most-played first
+    const all = cards.map((c, i) => ({c, n: counts[i], i})), newest = all[0];
+    const order = all.slice(1).sort((a, b) => b.n - a.n || a.i - b.i);
+    box.appendChild(newest.c);
+    if (newest.n > 0){ const p = document.createElement('div'); p.className = 'plays'; p.textContent = `🔥 ${fmt(newest.n)}판 플레이`; newest.c.querySelector('.rec').before(p); }
     order.forEach(({c, n}, rank) => {
       box.appendChild(c);
       if (n > 0){ const p = document.createElement('div'); p.className = 'plays'; p.textContent = `🔥 ${fmt(n)}판 플레이`; c.querySelector('.rec').before(p); }
-      if (rank === 0 && n > 0 && n > order[1].n){ let b = c.querySelector('.badge'); if (!b){ b = document.createElement('span'); c.prepend(b); } b.className = 'badge hot'; b.textContent = '인기 1위'; }
+      if (rank === 0 && n > 0 && (!order[1] || n > order[1].n)){ let b = c.querySelector('.badge'); if (!b){ b = document.createElement('span'); c.prepend(b); } b.className = 'badge hot'; b.textContent = '인기 1위'; }
     });
   })();
 })();
