@@ -81,8 +81,19 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
   </header>
 
   <div id="games">
-  <a class="card" href="https://flash-bbang.github.io/kaltoe-park/" id="game-kaltoe" data-game="kaltoe">
+  <a class="card" href="https://flash-bbang.github.io/mom-dont-look/" id="game-mom" data-game="mom">
     <span class="badge">NEW</span>
+    <div class="thumb"><img src="thumb_mom.jpg" alt="엄마 몰래 폰겜 플레이 화면: 설거지하는 엄마 뒤에서 몰래 폰 게임을 하는 아이" width="600" height="750"></div>
+    <div class="info">
+      <h2 class="name">엄마 몰래 폰겜<small>MOM DON'T LOOK</small></h2>
+      <p class="desc">꾹 누르면 폰겜, 떼면 공부하는 척. 돌아보면 등짝 스매싱!</p>
+      <div class="chips"><span>눈치</span><span>꾹 누르기</span><span>5단계</span></div>
+      <div class="rec" data-game="mom"></div>
+      <span class="play">플레이 ▶</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://flash-bbang.github.io/kaltoe-park/" id="game-kaltoe" data-game="kaltoe">
     <div class="thumb"><img src="thumb_kaltoe.jpg" alt="칼퇴 박대리 플레이 화면: 퇴근길을 달리는 박대리를 쫓아오는 부장님" width="600" height="750"></div>
     <div class="info">
       <h2 class="name">칼퇴 박대리<small>KALTOE PARK</small></h2>
@@ -158,6 +169,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 
   const fmt = n => Number(n).toLocaleString();
   const mine = {
+    mom: () => { const v = Number(JSON.parse(read('md-best') || '0')); return v ? `${fmt(v)}점` : null; },
     kaltoe: () => { const v = Number(JSON.parse(read('kf-best') || '0')); return v ? `${fmt(v)}점` : null; },
     sudoku: () => { const v = Number(JSON.parse(read('bs-best') || '0')); return v ? `${fmt(v)}점` : null; },
     zoo: () => { const v = Number(JSON.parse(read('dz-best') || '0')); return v ? `${fmt(v)}점` : null; },
@@ -169,7 +181,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     const d = document.createElement('div'); if (cls) d.className = cls;
     d.append(label + ' '); const b = document.createElement('b'); b.textContent = value; d.appendChild(b); el.appendChild(d);
   }
-  for (const g of ['kaltoe', 'sudoku', 'zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
+  for (const g of ['mom', 'kaltoe', 'sudoku', 'zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
 
   // current #1 on each game's online leaderboard
   const KEY = 'AIzaSyAOEpHjYw322A0Vfrjmp2KNw9WAYUGURtg';
@@ -184,7 +196,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
       return f ? {name: String(f.name.stringValue || '?').slice(0, 12), score: Number(f.score.integerValue || 0)} : null;
     } catch(e){ return undefined; } finally { clearTimeout(t); }
   }
-  [['kaltoe', 'kaltoe_scores'], ['sudoku', 'sudoku_scores'], ['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
+  [['mom', 'mom_scores'], ['kaltoe', 'kaltoe_scores'], ['sudoku', 'sudoku_scores'], ['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
     const r = await top1(col);
     if (r === undefined) return;            // offline: say nothing rather than claim it's empty
     line(recEl(g), 'top', '지금 1등', r ? `${r.name} · ${fmt(r.score)}점` : '비어 있음, 첫 1등 도전!');
