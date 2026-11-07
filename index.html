@@ -67,6 +67,30 @@ h1 span{color:var(--toast)}
 .soon{border:4px dashed rgba(28,22,20,.45);border-radius:20px;padding:18px;text-align:center;font-size:19px;color:var(--muted);background:rgba(255,250,240,.45)}
 .soon b{display:block;font-family:var(--px);font-size:11px;font-weight:400;margin-bottom:8px;color:var(--ink)}
 footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
+/* Roblox promo: a banner under the header + a popup on first visit */
+.rbx{display:flex;align-items:center;gap:12px;background:#1f2430;color:#fff;border:4px solid var(--ink);border-radius:18px;box-shadow:0 6px 0 var(--ink);padding:9px 12px 9px 9px;text-decoration:none;position:relative}
+.rbx:focus-visible,.pop a:focus-visible,.pop button:focus-visible{outline:4px solid var(--butter);outline-offset:3px}
+.rbx img{width:58px;height:58px;border-radius:10px;border:2px solid #fff;flex-shrink:0}
+.rbx div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rbx small{font-family:var(--px);font-size:8px;color:#9fe3ff;letter-spacing:.05em}
+.rbx b{font-weight:400;font-size:21px;color:var(--butter)}
+.rbx span{font-size:14px;color:#c9d2e3}
+.rbx i{margin-left:auto;font-style:normal;font-size:16px;background:#00a2ff;border:2px solid #fff;border-radius:10px;padding:5px 10px;white-space:nowrap}
+.popwrap{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(28,22,20,.62);padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.pop{position:relative;width:min(360px,100%);max-height:100%;overflow:auto;background:var(--cream);border:4px solid var(--ink);border-radius:22px;box-shadow:0 8px 0 var(--ink);display:flex;flex-direction:column;animation:popin .28s cubic-bezier(.2,1.4,.4,1)}
+@keyframes popin{from{transform:scale(.85);opacity:0}}
+.pop .x{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:3px solid var(--ink);background:var(--cream);font-family:var(--kr);font-size:20px;cursor:pointer;line-height:1}
+.pop .art{display:flex;justify-content:center;background:#1f2430;border-bottom:4px solid var(--ink);border-radius:18px 18px 0 0;padding:10px}
+.pop .art img{display:block;width:min(100%,30vh);height:auto;max-width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:2px solid #fff}
+.pop .body{display:flex;flex-direction:column;gap:8px;padding:12px 16px 12px}
+.pop .kick{font-family:var(--px);font-size:9px;color:#0077cc;margin:0;letter-spacing:.04em}
+.pop h2{margin:0;font-weight:400;font-size:26px;line-height:1.1}
+.pop ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:16px;line-height:1.3}
+.pop .search{margin:0;font-size:15px;color:var(--muted);background:#e5f6ef;border:2px solid #bfe3d6;border-radius:10px;padding:6px 10px}
+.pop .go{display:block;text-align:center;text-decoration:none;font-size:22px;color:#fff;background:#00a2ff;border:3px solid var(--ink);border-radius:14px;padding:10px;box-shadow:0 4px 0 var(--ink)}
+.pop .go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.pop .later{align-self:center;background:none;border:0;font-family:var(--kr);font-size:15px;color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px}
+@media (prefers-reduced-motion:reduce){.pop{animation:none}}
 @media (max-width:360px){.card{grid-template-columns:96px minmax(0,1fr)}.thumb{width:96px}.name{font-size:23px}}
 @media (prefers-reduced-motion:reduce){.card{transition:none}}
 </style>
@@ -79,6 +103,12 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     <p class="tag">번쩍 만들고 빵 터지는 웹 게임 🍞⚡<br>설치 없이 누르면 바로 플레이</p>
     <p class="hello" id="hello"></p>
   </header>
+
+  <a class="rbx" href="https://www.roblox.com/games/96403392067363" target="_blank" rel="noopener" id="rbxBanner">
+    <img src="roblox_bag.jpg" alt="" width="58" height="58">
+    <div><small>ROBLOX · 신작</small><b>돈가방을 털어라!</b><span>최대 5명, 친구랑 같이 털기</span></div>
+    <i>플레이 ▶</i>
+  </a>
 
   <div id="games">
   <a class="card" href="https://flash-bbang.github.io/stop-the-hacker/" id="game-hack" data-game="hack">
@@ -240,6 +270,43 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
       if (rank === 0 && n > 0 && (!order[1] || n > order[1].n)){ let b = c.querySelector('.badge'); if (!b){ b = document.createElement('span'); c.prepend(b); } b.className = 'badge hot'; b.textContent = '인기 1위'; }
     });
   })();
+})();
+</script>
+
+<div class="popwrap" id="rbxPop" hidden role="dialog" aria-modal="true" aria-labelledby="rbxTitle">
+  <div class="pop">
+    <button class="x" id="rbxClose" type="button" aria-label="닫기">✕</button>
+    <a class="art" href="https://www.roblox.com/games/96403392067363" target="_blank" rel="noopener"><img src="roblox_bag.jpg" alt="돈가방을 털어라! 로블록스 게임 대표 이미지: 선글라스 낀 파란 펭귄 캐릭터와 돈가방" width="512" height="512"></a>
+    <div class="body">
+      <p class="kick">ROBLOX · flash.bbang 신작</p>
+      <h2 id="rbxTitle">돈가방을 털어라!</h2>
+      <ul>
+        <li>💰 돈가방 훔쳐서 입금하면 끝!</li>
+        <li>🐧 경비 펭귄은 쫓아오고</li>
+        <li>🟢 바닥엔 슬라임</li>
+        <li>☄️ 하늘에선 메테오</li>
+        <li>🚽 대기실 변기는 덤</li>
+        <li>👥 최대 5명, 친구랑 같이 털어요</li>
+      </ul>
+      <p class="search">로블록스에서 <b>"돈가방을 털어라!"</b> 검색 🔍</p>
+      <a class="go" href="https://www.roblox.com/games/96403392067363" target="_blank" rel="noopener" id="rbxGo">로블록스에서 플레이 ▶</a>
+      <button class="later" id="rbxLater" type="button">오늘 하루 안 보기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const pop = document.getElementById('rbxPop'), KEY = 'rbx-pop-hide', today = new Date().toISOString().slice(0, 10);
+  let hidden = ''; try { hidden = localStorage.getItem(KEY) || ''; } catch(e){}
+  const close = () => { pop.hidden = true; document.body.style.overflow = ''; };
+  const open = () => { pop.hidden = false; document.body.style.overflow = 'hidden'; document.getElementById('rbxGo').focus({preventScroll: true}); };
+  document.getElementById('rbxClose').addEventListener('click', close);
+  document.getElementById('rbxGo').addEventListener('click', close);
+  document.getElementById('rbxLater').addEventListener('click', () => { try { localStorage.setItem(KEY, today); } catch(e){} close(); });
+  pop.addEventListener('click', e => { if (e.target === pop) close(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !pop.hidden) close(); });
+  if (hidden !== today) setTimeout(open, 500);
 })();
 </script>
 </body>
