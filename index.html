@@ -81,8 +81,19 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
   </header>
 
   <div id="games">
-  <a class="card" href="https://flash-bbang.github.io/mom-dont-look/" id="game-mom" data-game="mom">
+  <a class="card" href="https://flash-bbang.github.io/stop-the-hacker/" id="game-hack" data-game="hack">
     <span class="badge">NEW</span>
+    <div class="thumb"><img src="thumb_hack.jpg" alt="해커를 막아라! 플레이 화면: 해커가 보내는 랜섬웨어를 방화벽·EDR 같은 보안 모듈이 막는 장면" width="600" height="750"></div>
+    <div class="info">
+      <h2 class="name">해커를 막아라!<small>STOP THE HACKER</small></h2>
+      <p class="desc">디도스·랜섬웨어·제로데이가 몰려온다. 보안 모듈 깔아서 서버 지키기. 털리면 시말서!</p>
+      <div class="chips"><span>디펜스</span><span>전략</span><span>10웨이브</span></div>
+      <div class="rec" data-game="hack"></div>
+      <span class="play">플레이 ▶</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://flash-bbang.github.io/mom-dont-look/" id="game-mom" data-game="mom">
     <div class="thumb"><img src="thumb_mom.jpg" alt="엄마 몰래 폰겜 플레이 화면: 설거지하는 엄마 뒤에서 몰래 폰 게임을 하는 아이" width="600" height="750"></div>
     <div class="info">
       <h2 class="name">엄마 몰래 폰겜<small>MOM DON'T LOOK</small></h2>
@@ -169,6 +180,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 
   const fmt = n => Number(n).toLocaleString();
   const mine = {
+    hack: () => { const v = Number(JSON.parse(read('hk-best') || '0')); return v ? `${fmt(v)}점` : null; },
     mom: () => { const v = Number(JSON.parse(read('md-best') || '0')); return v ? `${fmt(v)}점` : null; },
     kaltoe: () => { const v = Number(JSON.parse(read('kf-best') || '0')); return v ? `${fmt(v)}점` : null; },
     sudoku: () => { const v = Number(JSON.parse(read('bs-best') || '0')); return v ? `${fmt(v)}점` : null; },
@@ -181,7 +193,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
     const d = document.createElement('div'); if (cls) d.className = cls;
     d.append(label + ' '); const b = document.createElement('b'); b.textContent = value; d.appendChild(b); el.appendChild(d);
   }
-  for (const g of ['mom', 'kaltoe', 'sudoku', 'zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
+  for (const g of ['hack', 'mom', 'kaltoe', 'sudoku', 'zoo', 'block', 'space']){ const v = mine[g](); if (v) line(recEl(g), '', '내 최고', v); }
 
   // current #1 on each game's online leaderboard
   const KEY = 'AIzaSyAOEpHjYw322A0Vfrjmp2KNw9WAYUGURtg';
@@ -196,7 +208,7 @@ footer{text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
       return f ? {name: String(f.name.stringValue || '?').slice(0, 12), score: Number(f.score.integerValue || 0)} : null;
     } catch(e){ return undefined; } finally { clearTimeout(t); }
   }
-  [['mom', 'mom_scores'], ['kaltoe', 'kaltoe_scores'], ['sudoku', 'sudoku_scores'], ['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
+  [['hack', 'hack_scores'], ['mom', 'mom_scores'], ['kaltoe', 'kaltoe_scores'], ['sudoku', 'sudoku_scores'], ['zoo', 'zoo_scores'], ['block', 'block_scores'], ['space', 'scores']].forEach(async ([g, col]) => {
     const r = await top1(col);
     if (r === undefined) return;            // offline: say nothing rather than claim it's empty
     line(recEl(g), 'top', '지금 1등', r ? `${r.name} · ${fmt(r.score)}점` : '비어 있음, 첫 1등 도전!');
